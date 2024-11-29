@@ -1,101 +1,80 @@
-import Image from "next/image";
+"use client";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [audioContext, setAudioContext] = useState(null);
+  const [audioBuffers, setAudioBuffers] = useState({});
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const audiosList = [
+    { name: "Work It", audio_file: "01Workit.mp3" },
+    { name: "MakeIt", audio_file: "02Makeit.mp3" },
+    { name: "Do It", audio_file: "03DoIt.mp3" },
+    { name: "Makes Us", audio_file: "04MakesUs.mp3" },
+    { name: "Harder", audio_file: "05Harder.mp3" },
+    { name: "Better", audio_file: "06Better.mp3" },
+    { name: "Faster", audio_file: "07Faster.mp3" },
+    { name: "Stronger", audio_file: "08Stronger.mp3" },
+    { name: "More Than", audio_file: "09MoreThan.mp3" },
+    { name: "Power", audio_file: "10Power.mp3" },
+    { name: "Our", audio_file: "11Our.mp3" },
+    { name: "Never", audio_file: "12Never.mp3" },
+    { name: "Ever", audio_file: "13Ever.mp3" },
+    { name: "After", audio_file: "14After.mp3" },
+    { name: "Work Is", audio_file: "15WorkIs.mp3" },
+    { name: "Over", audio_file: "16Over.mp3" },
+  ];
+
+  useEffect(() => {
+    // Initialize AudioContext
+    const context = new (window.AudioContext || window.webkitAudioContext)();
+    setAudioContext(context);
+
+    // Preload and decode all audio files
+    const loadAudios = async () => {
+      const buffers = {};
+      for (const audio of audiosList) {
+        const response = await fetch("/audios/" + audio.audio_file);
+        const arrayBuffer = await response.arrayBuffer();
+        buffers[audio.name] = await context.decodeAudioData(arrayBuffer);
+      }
+      setAudioBuffers(buffers);
+    };
+
+    loadAudios();
+
+    return () => {
+      context.close(); // Clean up the audio context when the component unmounts
+    };
+  }, []);
+
+  const playAudio = (name) => {
+    if (audioContext && audioBuffers[name]) {
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffers[name];
+      source.connect(audioContext.destination);
+      source.start(0);
+    }
+  };
+
+  return (
+    <div className="mx-auto max-w-6xl my-8 p-4 bg-slate-100">
+      <div className="grid grid-cols-2 gap-4">
+        <a
+        href="/v2"
+          className="rounded-full col-span-2 bg-indigo-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          La version iPhone iOS &rarr;
+        </a>
+        {audiosList.map((audio) => (
+          <button
+            key={audio.name}
+            id={audio.name}
+            onClick={() => playAudio(audio.name)}
+            className="bg-green-50 cursor-pointer rounded-lg border ring-[0.5px] ring-slate-300 shadow-md  p-2 md:p-6 text-center h-full align-middle text-lg uppercase font-extrabold"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+            {audio.name}
+          </button>
+        ))}
+      </div></div>
   );
 }

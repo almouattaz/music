@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multiple Audio Player</title>
+</head>
+<body>
+  <h1>Play Multiple Audio</h1>
+  <button id="playAudio1">Harder</button>
+  <button id="playAudio2">Better</button>
+
+  <audio id="audio1" src="05Harder.mp3"></audio>
+  <audio id="audio2" src="06Better.mp3"></audio>
+
+  <script>
+    const audio1 = document.getElementById('audio1');
+    const audio2 = document.getElementById('audio2');
+
+    document.getElementById('playAudio1').addEventListener('click', () => {
+      audio2.pause(); // Stop audio2 if it's playing
+      audio2.currentTime = 0; // Reset audio2 to the beginning
+      audio1.play(); // Play audio1
+    });
+
+    document.getElementById('playAudio2').addEventListener('click', () => {
+      audio1.pause(); // Stop audio1 if it's playing
+      audio1.currentTime = 0; // Reset audio1 to the beginning
+      audio2.play(); // Play audio2
+    });
+  </script>
+</body>
+</html>
