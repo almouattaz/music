@@ -33,7 +33,7 @@ export default function Home() {
     const loadAudios = async () => {
       const buffers = {};
       for (const audio of audiosList) {
-        const response = await fetch("/audios/" + audio.audio_file);
+        const response = await fetch("/music/audios/" + audio.audio_file);
         const arrayBuffer = await response.arrayBuffer();
         buffers[audio.name] = await context.decodeAudioData(arrayBuffer);
       }
@@ -60,7 +60,7 @@ export default function Home() {
     <div className="mx-auto max-w-6xl my-8 p-4 bg-slate-100">
       <div className="grid grid-cols-2 gap-4">
         <a
-        href="/v2"
+        href="/music/v2"
           className="rounded-full col-span-2 bg-indigo-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
           La version iPhone iOS &rarr;

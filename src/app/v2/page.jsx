@@ -37,7 +37,7 @@ const AudioPlayer = () => {
 
     const buffers = {};
     for (const audio of audiosList) {
-      const response = await fetch("/audios/" + audio.audio_file);
+      const response = await fetch("/music/audios/" + audio.audio_file);
       const arrayBuffer = await response.arrayBuffer();
       buffers[audio.name] = await context.decodeAudioData(arrayBuffer);
     }
