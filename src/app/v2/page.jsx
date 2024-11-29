@@ -10,8 +10,8 @@ const AudioPlayer = () => {
   const [audioBuffers, setAudioBuffers] = useState({});
   const [isInitialized, setIsInitialized] = useState(false); // Track if audio is initialized
   const audiosList = [
-    { name: "Work It", audio_file: "01Workit.mp3" },
-    { name: "MakeIt", audio_file: "02Makeit.mp3" },
+    { name: "Work It", audio_file: "01WorkIt.mp3" },
+    { name: "MakeIt", audio_file: "02MakeIt.mp3" },
     { name: "Do It", audio_file: "03DoIt.mp3" },
     { name: "Makes Us", audio_file: "04MakesUs.mp3" },
     { name: "Harder", audio_file: "05Harder.mp3" },
