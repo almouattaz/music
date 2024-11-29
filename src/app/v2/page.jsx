@@ -85,7 +85,7 @@ const AudioPlayer = () => {
           className="rounded-full col-span-2 bg-indigo-400 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
             
-          {isInitialized ? <span>Audio prêt</span> : <span className="animate-pulse text-yellow-300 uppercase bg-red-600 py-1 px-6 rounded-full">Click pour initialiser l'audio</span>}
+          {isInitialized ? <span>Audio prêt</span> : <span className="animate-pulse text-yellow-300 uppercase bg-red-600 py-1 px-6 rounded-full">Click pour initialiser l&apos;audio</span>}
         </button>
           {audiosList.map((audio) => (
             <button
