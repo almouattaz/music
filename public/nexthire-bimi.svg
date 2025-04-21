@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg  version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <title>Nexthire.fr</title>
+  <g id="Calque_3" data-name="Calque 3">
+    <circle cx="500" cy="500" r="500" fill="#009939" stroke-width="0"/>
+  </g>
+  <g id="Calque_2" data-name="Calque 2">
+    <g>
+      <path d="M487.13,268.47l-75.6,432h-108.6l-75.6-236.4-40.8,236.4h-108.6l76.2-432h111.6l74.4,220.8,39-220.8h108Z" fill="#15172c" stroke-width="0"/>
+      <path d="M905.33,268.47l-75.6,432h-108.6l27.6-156h-117l-27,156h-108.6l76.2-432h108l-32.4,182.4h117l32.4-182.4h108Z" fill="#15172c" stroke-width="0"/>
+    </g>
+  </g>
+</svg>
