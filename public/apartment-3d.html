@@ -34,7 +34,12 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #panel{top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:300px;max-height:calc(100% - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;overflow:hidden}
 .ph{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px 8px}
 .ph h2{margin:0;font:700 15px/1 var(--f-display);letter-spacing:.06em;text-transform:uppercase}
-#toggle{display:none;border:1px solid var(--line);background:var(--chip);color:var(--ink);font:600 12px/1 var(--f-display);letter-spacing:.05em;text-transform:uppercase;padding:7px 10px;border-radius:6px;cursor:pointer}
+#toggle{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--chip);color:var(--ink);font:600 12px/1 var(--f-display);letter-spacing:.05em;text-transform:uppercase;padding:7px 10px;border-radius:6px;cursor:pointer}
+#toggle:hover{border-color:var(--muted)}
+#toggle svg{width:10px;height:10px;transition:transform .2s}
+#panel.collapsed #toggle svg{transform:rotate(180deg)}
+#panel.collapsed .pbody{display:none}
+#panel.collapsed .ph{padding-bottom:12px}
 .pbody{overflow:auto;padding:0 14px 14px;display:flex;flex-direction:column;gap:12px}
 #mini{width:100%;height:230px;display:block;background:var(--chip);border-radius:8px;cursor:crosshair}
 .controls{display:flex;gap:8px;align-items:center}
@@ -65,8 +70,6 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .brand h1{font-size:18px}
   .brand p{display:none}
   #panel{top:auto;left:12px;right:12px;width:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));max-height:58%}
-  #toggle{display:inline-block}
-  #panel.collapsed .pbody{display:none}
   #mini{height:190px}
   #hud{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px))}
   #hint{display:none!important}
@@ -88,8 +91,8 @@ button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 </header>
 
 <aside id="panel" class="float collapsed">
-  <div class="ph"><h2>Rooms</h2><button id="toggle" aria-expanded="false">Show plan</button></div>
-  <div class="pbody">
+  <div class="ph"><h2>Rooms</h2><button id="toggle" aria-expanded="false" aria-controls="pbody"><span>Show</span><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 7 5 3 9 7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></button></div>
+  <div class="pbody" id="pbody">
     <canvas id="mini" aria-label="Plan minimap. Click to jump."></canvas>
     <div class="controls" id="orbitCtl">
       <div class="seg small" role="group" aria-label="Wall height">
@@ -477,9 +480,12 @@ $('wFull').onclick=()=>setCut(H); $('wLow').onclick=()=>setCut(1.05);
 $('reset').onclick=()=>{tween(new THREE.Vector3(5.4,13.5,15.2),CENTER.clone());setActive(null);};
 let hintClosed=false; $('hintX').onclick=()=>{hintClosed=true;$('hint').hidden=true;};
 const panel=$('panel'), phone=()=>matchMedia('(max-width:760px)').matches;
-if(!phone()) panel.classList.remove('collapsed');
-$('toggle').onclick=()=>{const c=panel.classList.toggle('collapsed');$('toggle').textContent=c?'Show plan':'Hide';$('toggle').setAttribute('aria-expanded',!c);};
-function collapsePanelOnPhone(){if(phone()&&!panel.classList.contains('collapsed'))$('toggle').click();}
+function setCollapsed(c){panel.classList.toggle('collapsed',c);$('toggle').firstChild.textContent=c?'Show':'Hide';$('toggle').setAttribute('aria-expanded',String(!c));
+  if(!c) requestAnimationFrame(sizeMini); try{localStorage.setItem('roomsCollapsed',c?'1':'0');}catch(e){}}
+let startCollapsed=phone(); try{const v=localStorage.getItem('roomsCollapsed'); if(v!==null&&!phone()) startCollapsed=v==='1';}catch(e){}
+setCollapsed(startCollapsed);
+$('toggle').onclick=()=>setCollapsed(!panel.classList.contains('collapsed'));
+function collapsePanelOnPhone(){if(phone()&&!panel.classList.contains('collapsed'))setCollapsed(true);}
 
 /* ---------- Walk controls ---------- */
 const coarse=matchMedia('(pointer: coarse)').matches;
